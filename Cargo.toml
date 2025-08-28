@@ -1,0 +1,19 @@
+[package]
+name = "gemini-live-rust"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1"
+base64 = "0.22"
+clap = { version = "4", features = ["derive"] }
+futures = "0.3"
+image = "0.24"
+parking_lot = "0.12"
+scrap = "0.5"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["full"] }
+tokio-tungstenite = { version = "0.21", features = ["rustls-tls-webpki-roots"] }
+tungstenite = { version = "0.21", default-features = false, features = ["rustls-tls-webpki-roots"] }
+cpal = "0.15"
