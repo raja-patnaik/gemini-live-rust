@@ -270,8 +270,9 @@ async fn stream_mic_audio(out: mpsc::Sender<Message>) -> Result<()> {
                 move |data: &[u16], _| {
                     let mut buf = shared_cb.lock();
                     for &s in data {
-                        // map 0..65535 to -32768..32767
-                        buf.push(s as i32 - 32768i32 as i16);
+                        // Map 0..65535 -> -32768..32767 safely, then cast to i16
+                        let centered: i32 = s as i32 - 32768;
+                        buf.push(centered as i16);
                     }
                 },
                 err_fn,
@@ -388,7 +389,7 @@ async fn stream_screen_jpeg(out: mpsc::Sender<Message>, fps: u32) -> Result<()> 
         let mut jpeg = Vec::new();
         {
             let mut enc = JpegEncoder::new_with_quality(&mut jpeg, 80);
-            enc.encode(&rgb, w as u16, h as u16, ColorType::Rgb8)?;
+            enc.encode(&rgb, w as u32, h as u32, ColorType::Rgb8)?;
         }
         let b64 = BASE64.encode(&jpeg);
 
